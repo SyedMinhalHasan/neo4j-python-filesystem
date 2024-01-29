@@ -99,10 +99,10 @@ def add_owner(node_id: int, user_id: int):
 @app.delete("/remove_file_owner/{file_id}")
 def remove_file_owner(file_id: int, user_id: int):
     query = """
-    MATCH (f:File)-[r:OWNED_BY]->(u:User) 
-    WHERE ID(f) = $file_id AND ID(u) = $user_id
+    MATCH (n)-[r:OWNED_BY]->(u:User)
+    WHERE (n:File OR n:Directory) AND ID(n) = $file_id AND ID(u) = $user_id
     DELETE r
-    RETURN f, u
+    RETURN n, u
     """
     return execute_query(query, {'file_id': file_id, 'user_id': user_id})
 
